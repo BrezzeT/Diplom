@@ -31,3 +31,19 @@ export async function getOrders() {
     throw new Error("Помилка завантаження замовлень");
   }
 }
+
+export async function updateOrderStatus(orderId: string, status: string) {
+  try {
+    await connectDB();
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+    if (!updatedOrder) return { success: false, message: "Замовлення не знайдено" };
+    return { success: true, message: "Статус оновлено" };
+  } catch (error) {
+    console.log(error);
+    return { success: false, message: "Помилка оновлення статусу" };
+  }
+}

@@ -25,6 +25,9 @@ export const useCartStore = create<CartStore>()(
           (item) => item.id === product.id,
         );
         if (existingItem) {
+          if (product.stock && existingItem.quantity >= product.stock) {
+            return;
+          }
           set({
             items: currentItems.map((item) =>
               item.id === product.id

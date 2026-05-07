@@ -26,7 +26,11 @@ export default function ProductList({
   });
   return (
     <div
-      className={`grid grid-cols-2 gap-2 ${isAdmin ? "md:grid-cols-3 lg:grid-cols-5" : "md:grid-cols-3 lg:grid-cols-4"}`}
+      className={
+        isAdmin
+          ? "flex flex-col gap-3"
+          : "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+      }
     >
       {filterdProduct.length === 0 ? (
         <div className="col-span-full text-center text-slate-500 py-8">

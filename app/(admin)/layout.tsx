@@ -7,13 +7,13 @@ export default function Admin({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex">
+    <div className="flex bg-white">
       <Sidebar />
-      <div className="flex flex-col min-h-screen w-full bg-zinc-50 text-zinc-900 transition-all duration-300 ease-in-out">
+      <div className="flex flex-col min-h-screen w-full bg-slate-50/50 transition-all duration-300 ease-in-out">
         <AdminHeader />
-        <div className="flex-1 px-2 md:px-12 mt-2 md:mt-6 container mx-auto mb-2 md:mb-6">
+        <main className="flex-1 w-full max-w-[1600px] mx-auto px-6 md:px-8 lg:px-10 py-6 md:py-10">
           {children}
-        </div>
+        </main>
       </div>
     </div>
   );

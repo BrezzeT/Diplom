@@ -2,7 +2,7 @@
 import { AdminSidebarLinks } from "@/config/site";
 import { useUIStore } from "@/lib/store/general";
 import Link from "next/link";
-import { ChevronDown, Home } from "lucide-react";
+import { ChevronDown, Home, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
@@ -27,36 +27,43 @@ export default function Sidebar() {
       className={`border-r border-orange-500/10 bg-white transition-all duration-300 ease-in-out z-50
         ${
           isSidebarOpen
-            ? "fixed inset-y-0 left-0 w-72 md:relative md:w-72"
+            ? "fixed inset-y-0 top-0 w-full md:relative md:w-100"
             : "fixed inset-y-0 -left-full md:relative md:left-0 md:w-20"
         }
         md:sticky md:top-0 md:h-screen md:flex md:flex-col
       `}
     >
       <div className="flex flex-col h-full w-full overflow-hidden">
-        {/* LOGO AREA */}
-        <div className="flex items-center h-20 px-4 md:px-5 border-b border-orange-500/10 shrink-0">
-          <Link
-            href="/admin"
-            className="flex items-center gap-3 overflow-hidden"
-          >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white font-black text-xl transition-transform duration-300">
+        <div className="flex items-center justify-between h-20 px-6 border-b border-orange-500/5 shrink-0 bg-white/50 backdrop-blur-sm">
+          <Link href="/admin" className="flex items-center gap-3.5 group">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] bg-orange-500 text-white font-black text-xl shadow-lg shadow-orange-500/30 group-hover:scale-105 transition-all duration-500 group-hover:rotate-3">
               E
             </div>
             {isSidebarOpen && (
-              <div className="flex flex-col leading-tight whitespace-nowrap animate-in fade-in slide-in-from-left-2">
-                <span className="text-lg font-bold tracking-tight text-slate-800">
-                  Store<span className="text-orange-500">.</span>
+              <div className="flex flex-col leading-none animate-in fade-in slide-in-from-left-3 duration-500">
+                <span className="text-xl font-black tracking-tighter text-slate-900 uppercase">
+                  Super<span className="text-orange-500">.</span>
                 </span>
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                  Admin Panel
+                <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">
+                  Management
                 </span>
               </div>
             )}
           </Link>
+
+          {/* Кнопка закрытия для мобилок */}
+          {isSidebarOpen && (
+            <button
+              onClick={() => toggleSidebar()}
+              className="md:hidden p-2 rounded-xl bg-slate-900 text-white shadow-lg active:scale-90 transition-all"
+              aria-label="Закрити меню"
+            >
+              <X size={20} strokeWidth={2.5} />
+            </button>
+          )}
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-2 md:px-3 py-6 space-y-2 no-scrollbar">
+        <nav className="flex-1 overflow-y-auto px-3 py-8 space-y-1.5 no-scrollbar custom-scrollbar">
           {AdminSidebarLinks.map((link) => {
             const isExpanded = expanded?.includes(link.title);
             const hasSubLink = link.subLinks && link.subLinks.length > 0;
@@ -69,24 +76,27 @@ export default function Sidebar() {
                 {link.href && !hasSubLink ? (
                   <Link
                     href={link.href}
-                    className={`flex items-center h-11 px-3 rounded-xl transition-all duration-200 group relative
+                    className={`flex items-center h-12 px-4 rounded-2xl transition-all duration-300 group relative
                       ${
                         isActive
-                          ? "bg-orange-500 text-white shadow-md shadow-orange-500/20"
-                          : "text-slate-500 hover:bg-orange-500/5 hover:text-orange-500"
+                          ? "bg-slate-900 text-white shadow-xl shadow-slate-900/10"
+                          : "text-slate-500 hover:bg-orange-500/5 hover:text-orange-600"
                       }
-                      ${isSidebarOpen ? "gap-3" : "md:justify-center"}
+                      ${isSidebarOpen ? "gap-4" : "md:justify-center"}
                     `}
                   >
                     <link.icon
-                      size={22}
+                      size={20}
                       strokeWidth={isActive ? 2.5 : 2}
-                      className="shrink-0 transition-transform duration-200"
+                      className={`shrink-0 transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}
                     />
                     {isSidebarOpen && (
-                      <span className="font-bold text-sm truncate tracking-tight">
+                      <span className="font-bold text-[14px] tracking-tight">
                         {link.title}
                       </span>
+                    )}
+                    {isActive && isSidebarOpen && (
+                      <div className="absolute right-3 w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
                     )}
                   </Link>
                 ) : (
@@ -95,29 +105,31 @@ export default function Sidebar() {
                       if (!isSidebarOpen) toggleSidebar();
                       if (hasSubLink) toggleExpanded(link.title);
                     }}
-                    className={`w-full flex items-center h-11 px-3 rounded-xl transition-all duration-200 group
+                    className={`w-full flex items-center h-12 px-4 rounded-2xl transition-all duration-300 group
                       ${
                         isActive
-                          ? "bg-orange-500/10 text-orange-600"
-                          : "text-slate-500 hover:bg-orange-500/5 hover:text-orange-500"
+                          ? "bg-orange-500/5 text-orange-600"
+                          : "text-slate-500 hover:bg-orange-500/5 hover:text-orange-600"
                       }
-                      ${isSidebarOpen ? "gap-3" : "md:justify-center"}
+                      ${isSidebarOpen ? "gap-4" : "md:justify-center"}
                     `}
                   >
                     <link.icon
-                      size={22}
+                      size={20}
                       strokeWidth={isActive ? 2.5 : 2}
-                      className="shrink-0"
+                      className="shrink-0 transition-transform duration-300 group-hover:scale-110"
                     />
                     {isSidebarOpen && (
                       <>
-                        <span className="flex-1 font-bold text-sm text-left truncate tracking-tight">
+                        <span className="flex-1 font-bold text-[14px] text-left tracking-tight">
                           {link.title}
                         </span>
                         <ChevronDown
-                          size={16}
-                          className={`transition-transform duration-300 opacity-40 ${
-                            isExpanded ? "rotate-180" : ""
+                          size={14}
+                          className={`transition-all duration-500 opacity-40 ${
+                            isExpanded
+                              ? "rotate-180 text-orange-500 opacity-100"
+                              : ""
                           }`}
                         />
                       </>
@@ -126,19 +138,26 @@ export default function Sidebar() {
                 )}
 
                 {isSidebarOpen && isExpanded && hasSubLink && (
-                  <div className="ml-8 mt-1 space-y-1 border-l border-orange-500/20 pl-4 py-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                  <div className="ml-6 mt-2 space-y-1 py-1 animate-in fade-in slide-in-from-top-2 duration-300">
                     {link.subLinks?.map((sub) => {
                       const isSubActive = pathname === sub.href;
                       return (
                         <Link
                           key={sub.title}
                           href={sub.href}
-                          className={`block py-1.5 text-[13px] font-semibold transition-all ${
+                          className={`group/sub flex items-center gap-3 px-5 py-2.5 rounded-xl text-[13px] font-bold transition-all ${
                             isSubActive
-                              ? "text-orange-600"
-                              : "text-slate-400 hover:text-orange-500"
+                              ? "text-orange-600 bg-orange-500/5"
+                              : "text-slate-400 hover:text-slate-700 hover:bg-slate-50"
                           }`}
                         >
+                          <div
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
+                              isSubActive
+                                ? "bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.8)] scale-125"
+                                : "bg-slate-200 group-hover/sub:bg-slate-400 group-hover/sub:scale-110"
+                            }`}
+                          />
                           {sub.title}
                         </Link>
                       );
@@ -150,17 +169,20 @@ export default function Sidebar() {
           })}
         </nav>
 
-        <div className="p-3 md:p-4 border-t border-orange-500/10 shrink-0">
+        <div className="p-4 border-t border-orange-500/5 bg-slate-50/30">
           <Link
             href="/"
-            className={`flex items-center h-11 px-3 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-orange-500 transition-all font-bold text-sm group
-                ${isSidebarOpen ? "gap-3" : "md:justify-center"}
+            className={`flex items-center h-12 px-4 rounded-2xl text-slate-500 hover:bg-white hover:text-orange-600 hover:shadow-sm transition-all font-bold text-[14px] group border border-transparent hover:border-slate-100
+                ${isSidebarOpen ? "gap-4" : "md:justify-center"}
             `}
           >
-            <Home size={22} className="shrink-0" />
+            <Home
+              size={20}
+              className="shrink-0 transition-transform group-hover:scale-110"
+            />
             {isSidebarOpen && (
               <span className="truncate tracking-tight whitespace-nowrap">
-                Магазин
+                На головну
               </span>
             )}
           </Link>
