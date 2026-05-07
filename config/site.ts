@@ -6,6 +6,7 @@ import {
   Settings,
   Store,
   Plus,
+  ShoppingCart,
 } from "lucide-react";
 export const SabHeaderLinks = [
   {
@@ -40,6 +41,7 @@ export const AdminSidebarLinks = [
     subLinks: [
       { title: "Товари", href: "/admin/products", icon: Box },
       { title: "Додати товар", href: "/admin/add-products", icon: Plus },
+      { title: "Замовлення", href: "/admin/orders", icon: ShoppingCart },
     ],
   },
   {

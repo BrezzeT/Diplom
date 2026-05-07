@@ -11,6 +11,7 @@ export default function ProductForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<IProduct>({
+    _id: "",
     name: "",
     description: "",
     price: 0,
@@ -44,7 +45,7 @@ export default function ProductForm() {
     <div className="flex flex-col gap-10">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
+          <h1 className="text-3xl font-bold">
             Додати товар
           </h1>
           <p className="text-slate-500">
@@ -54,14 +55,14 @@ export default function ProductForm() {
         <div className="flex gap-4">
           <button
             onClick={() => router.back()}
-            className="px-6 py-3 border border-slate-200 rounded-2xl font-semibold text-slate-600 hover:bg-slate-50 transition-all"
+            className="px-6 py-3 border border-orange-500/20 rounded-2xl font-semibold text-slate-600 hover:bg-orange-500/5 transition-all"
           >
             Скасувати
           </button>
           <button
             disabled={isSubmitting}
             onClick={handleSave}
-            className="px-8 py-3 bg-indigo-600 text-white rounded-2xl font-bold shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-95 disabled:opacity-50"
+            className="px-8 py-3 bg-orange-500 text-white rounded-2xl font-bold shadow-xl shadow-orange-500/20 hover:bg-orange-600 transition-all active:scale-95 disabled:opacity-50"
           >
             {isSubmitting ? "Збереження..." : "Зберегти товар"}
           </button>
@@ -72,7 +73,7 @@ export default function ProductForm() {
         <div className="lg:col-span-2 space-y-8">
           <div className="p-8 bg-white border border-slate-100 rounded-[32px] shadow-sm space-y-8">
             <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-              <Info size={22} className="text-indigo-500" />
+              <Info size={22} className="text-blue-500" />
               Основна інформація
             </h2>
             <div className="space-y-6">
@@ -87,7 +88,7 @@ export default function ProductForm() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:border-indigo-200 focus:bg-white transition-all font-medium mt-1"
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:border-orange-500/30 focus:bg-white transition-all font-medium mt-1"
                 />
               </div>
               <div className="space-y-2">
@@ -101,7 +102,7 @@ export default function ProductForm() {
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:border-indigo-200 focus:bg-white transition-all font-medium resize-none mt-1"
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:border-orange-500/30 focus:bg-white transition-all font-medium resize-none mt-1"
                 />
               </div>
             </div>
@@ -109,19 +110,19 @@ export default function ProductForm() {
 
           <div className="p-8 bg-white border border-slate-100 rounded-[32px] shadow-sm space-y-8">
             <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
-              <ImagePlus size={22} className="text-indigo-500" />
+              <ImagePlus size={22} className="text-blue-500" />
               Медіафайли
             </h2>
             <label className="relative group cursor-pointer block">
               <input type="file" className="hidden" accept="image/*" />
-              <div className="h-72 border-2 border-dashed border-slate-200 bg-slate-50 rounded-3xl flex flex-col items-center justify-center group-hover:bg-indigo-50/50 group-hover:border-indigo-200 transition-all duration-300">
-                <div className="p-5 bg-white rounded-full shadow-sm text-slate-300 group-hover:text-indigo-500 mb-4 transition-all">
+              <div className="h-72 border-2 border-dashed border-slate-200 bg-slate-50 rounded-3xl flex flex-col items-center justify-center group-hover:bg-orange-500/5 group-hover:border-orange-500/30 transition-all duration-300">
+                <div className="p-5 bg-white rounded-full shadow-sm text-slate-300 group-hover:text-orange-500 mb-4 transition-all">
                   <UploadCloud size={36} />
                 </div>
-                <p className="font-bold text-slate-600 group-hover:text-indigo-600 transition-colors">
+                <p className="font-bold text-slate-600 group-hover:text-orange-600 transition-colors">
                   Натисніть для завантаження
                 </p>
-                <p className="text-xs  mt-1 font-medium italic text-indigo-500">
+                <p className="text-xs  mt-1 font-medium italic text-orange-500">
                   Тільки картинки до 5MB
                 </p>
               </div>
@@ -153,7 +154,7 @@ export default function ProductForm() {
                   onChange={(e) =>
                     setFormData({ ...formData, price: Number(e.target.value) })
                   }
-                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:border-indigo-200 transition-all font-bold text-xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:border-orange-500/30 transition-all font-bold text-xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <span className="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-slate-400 text-sm">
                   UAH
@@ -167,7 +168,7 @@ export default function ProductForm() {
                   onChange={(e) =>
                     setFormData({ ...formData, stock: Number(e.target.value) })
                   }
-                  className="w-full px-5 py-4 bg-slate-50 border border-slate-100 rounded-2xl outline-none focus:border-indigo-200 transition-all font-bold text-xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:border-orange-500/30 transition-all font-bold text-xl [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <span className="absolute right-5 top-1/2 -translate-y-1/2 font-bold text-slate-400 text-sm">
                   ШТ
@@ -195,8 +196,8 @@ export default function ProductForm() {
                   }
                   className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all active:scale-95 ${
                     formData.category === cat
-                      ? "bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-100"
-                      : "bg-slate-50 border-slate-100 text-slate-600 hover:border-indigo-200"
+                      ? "bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-500/20"
+                      : "bg-slate-50 border-slate-200 text-slate-600 hover:border-orange-500/30"
                   }`}
                 >
                   {cat}
@@ -220,8 +221,8 @@ export default function ProductForm() {
                         onClick={() => setFormData({ ...formData, brand })}
                         className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all active:scale-95 ${
                           formData.brand === brand
-                            ? "bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-100"
-                            : "bg-slate-50 border-slate-100 text-slate-600 hover:border-indigo-200"
+                            ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20"
+                            : "bg-slate-50 border-slate-200 text-slate-600 hover:border-blue-500/30"
                         }`}
                       >
                         {brand}
@@ -244,8 +245,8 @@ export default function ProductForm() {
                         onClick={() => setFormData({ ...formData, color })}
                         className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all active:scale-95 ${
                           formData.color === color
-                            ? "bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-100"
-                            : "bg-slate-50 border-slate-100 text-slate-600 hover:border-indigo-200"
+                            ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20"
+                            : "bg-slate-50 border-slate-200 text-slate-600 hover:border-blue-500/30"
                         }`}
                       >
                         {color}

@@ -6,15 +6,22 @@ export default function Card({
   productsCount = 0,
   outOfStock = 0,
   productCash,
+  OrderCount = 0,
 }: {
   productsCount?: number;
   outOfStock?: number;
   productCash?: number;
+  OrderCount?: number;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const cards = getCardHome(productsCount, outOfStock, productCash ?? 0);
+  const cards = getCardHome(
+    productsCount,
+    outOfStock,
+    productCash ?? 0,
+    OrderCount,
+  );
 
   const handleScroll = () => {
     if (!scrollRef.current) return;

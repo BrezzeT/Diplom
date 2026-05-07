@@ -23,7 +23,7 @@ export default function Filter() {
           <input
             type="text"
             placeholder="Швидкий пошук..."
-            className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/5 transition-all"
+            className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-orange-500 focus:ring-4 focus:ring-orange-500/5 transition-all"
           />
         </div>
         <div className="flex items-center gap-2 overflow-x-auto pb-1 lg:pb-0 no-scrollbar">
@@ -35,8 +35,8 @@ export default function Filter() {
                 onClick={() => setCategory(cat === category ? null : cat)}
                 className={`whitespace-nowrap px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 border active:scale-95 ${
                   category === cat
-                    ? "bg-blue-600 border-blue-600 text-white"
-                    : "bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50"
+                    ? "bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-500/20"
+                    : "bg-white border-slate-200 text-slate-500 hover:border-orange-500/30 hover:bg-orange-500/5"
                 }`}
               >
                 {cat}
@@ -73,8 +73,8 @@ export default function Filter() {
                   onClick={() => setBrand(item, null)}
                   className={`whitespace-nowrap px-4 py-2 rounded-lg font-medium text-xs transition-all border active:scale-95 ${
                     brand === item
-                      ? "bg-blue-600 border-blue-600 text-white"
-                      : "bg-white border-slate-200 text-slate-500 hover:border-blue-300 hover:text-blue-600"
+                      ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20"
+                      : "bg-white border-slate-200 text-slate-500 hover:border-blue-500/30 hover:text-blue-600"
                   }`}
                 >
                   {item}
@@ -102,8 +102,8 @@ export default function Filter() {
                   onClick={() => setColor(c === color ? null : c)}
                   className={`whitespace-nowrap px-4 py-2 rounded-lg font-medium text-xs transition-all border active:scale-95 ${
                     color === c
-                      ? "bg-indigo-600 border-indigo-600 text-white"
-                      : "bg-white border-slate-200 text-slate-500 hover:border-indigo-300 hover:text-indigo-600"
+                      ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20"
+                      : "bg-white border-slate-200 text-slate-500 hover:border-blue-500/30 hover:text-blue-600"
                   }`}
                 >
                   {c}

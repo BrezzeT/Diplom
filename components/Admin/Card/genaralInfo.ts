@@ -4,6 +4,7 @@ export const getCardHome = (
   productsCount: number,
   outOfStock: number,
   ProductCash: number,
+  ordersCount: number,
 ) => [
   {
     title: "Всього товарів",
@@ -28,7 +29,7 @@ export const getCardHome = (
   },
   {
     title: "Всього замовлень",
-    value: "100",
+    value: ordersCount,
     icon: ShoppingCart,
     color: "text-yellow-500",
     bg: "bg-yellow-500/20",

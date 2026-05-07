@@ -10,7 +10,7 @@ export default async function ProductsPage() {
         <h1 className="text-3xl font-bold">Управління товарами</h1>
         <Link
           href={"/admin/add-products"}
-          className="mt-4 md:mt-0 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all active:scale-90"
+          className="mt-4 md:mt-0 px-8 py-3 bg-orange-500 text-white rounded-2xl font-bold shadow-xl shadow-orange-500/20 hover:bg-orange-600 transition-all active:scale-95"
         >
           Додати товар
         </Link>

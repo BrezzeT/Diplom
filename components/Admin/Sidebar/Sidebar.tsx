@@ -2,7 +2,7 @@
 import { AdminSidebarLinks } from "@/config/site";
 import { useUIStore } from "@/lib/store/general";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Home } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
@@ -13,116 +13,130 @@ export default function Sidebar() {
 
   useEffect(() => {
     const store = useUIStore.getState();
-    if (store.isSidebarOpen && window.innerWidth) {
+    if (
+      store.isSidebarOpen &&
+      typeof window !== "undefined" &&
+      window.innerWidth < 768
+    ) {
       store.toggleSidebar();
     }
   }, [pathname]);
 
   return (
     <aside
-      className={`border-r border-orange-500/20 bg-white transition-all duration-100 ease-in-out backdrop-blur-xl
-        ${isSidebarOpen ? "fixed top-20 left-0 w-full h-[calc(100vh-5rem)] z-50 block" : "hidden"}
-        md:block md:sticky md:top-0 md:h-screen md:z-auto
-        ${isSidebarOpen ? "md:w-96 w-full" : "md:w-20 w-0"}`}
+      className={`border-r border-orange-500/10 bg-white transition-all duration-300 ease-in-out z-50
+        ${
+          isSidebarOpen
+            ? "fixed inset-y-0 left-0 w-72 md:relative md:w-72"
+            : "fixed inset-y-0 -left-full md:relative md:left-0 md:w-20"
+        }
+        md:sticky md:top-0 md:h-screen md:flex md:flex-col
+      `}
     >
-      <div className="flex flex-col h-full">
-        <div className="items-center h-20 px-5 border-b border-orange-500/20 hidden md:flex">
+      <div className="flex flex-col h-full w-full overflow-hidden">
+        {/* LOGO AREA */}
+        <div className="flex items-center h-20 px-4 md:px-5 border-b border-orange-500/10 shrink-0">
           <Link
             href="/admin"
-            className="flex items-center hover:opacity-90 transition-opacity"
+            className="flex items-center gap-3 overflow-hidden"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-linear-to-tr from-orange-600 to-orange-500 text-zinc-50 font-black text-xl shadow-lg shadow-orange-500/20">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500 text-white font-black text-xl transition-transform duration-300">
               E
             </div>
-            <div
-              className={`ml-3 overflow-hidden transition-all duration-300 ${
-                isSidebarOpen ? "max-w-40 opacity-100" : "max-w-0 opacity-0"
-              }`}
-            >
-              <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-orange-500 to-orange-500 whitespace-nowrap">
-                -commerce
-              </span>
-            </div>
+            {isSidebarOpen && (
+              <div className="flex flex-col leading-tight whitespace-nowrap animate-in fade-in slide-in-from-left-2">
+                <span className="text-lg font-bold tracking-tight text-slate-800">
+                  Store<span className="text-orange-500">.</span>
+                </span>
+                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                  Admin Panel
+                </span>
+              </div>
+            )}
           </Link>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-1">
+        <nav className="flex-1 overflow-y-auto px-2 md:px-3 py-6 space-y-2 no-scrollbar">
           {AdminSidebarLinks.map((link) => {
             const isExpanded = expanded?.includes(link.title);
-            const hasSubLink = link.subLinks?.length;
+            const hasSubLink = link.subLinks && link.subLinks.length > 0;
             const isActive =
               pathname === link.href ||
               link.subLinks?.some((sub) => sub.href === pathname);
+
             return (
-              <div
-                key={link.title}
-                className="flex flex-col relative group/item"
-              >
+              <div key={link.title} className="w-full">
                 {link.href && !hasSubLink ? (
                   <Link
                     href={link.href}
-                    className={`flex items-center px-3 py-2 rounded-xl cursor-pointer transition-all duration-200
-                      ${isActive ? "bg-orange-500/10 text-orange-500" : "text-blue-600 hover:bg-blue-500/10 hover:text-blue-600"}
-                      ${isSidebarOpen ? "gap-3" : "justify-center"}
+                    className={`flex items-center h-11 px-3 rounded-xl transition-all duration-200 group relative
+                      ${
+                        isActive
+                          ? "bg-orange-500 text-white shadow-md shadow-orange-500/20"
+                          : "text-slate-500 hover:bg-orange-500/5 hover:text-orange-500"
+                      }
+                      ${isSidebarOpen ? "gap-3" : "md:justify-center"}
                     `}
                   >
                     <link.icon
-                      size={28}
-                      strokeWidth={1.5}
-                      className="shrink-0"
+                      size={22}
+                      strokeWidth={isActive ? 2.5 : 2}
+                      className="shrink-0 transition-transform duration-200"
                     />
                     {isSidebarOpen && (
-                      <span className="flex-1 text-base font-medium">
+                      <span className="font-bold text-sm truncate tracking-tight">
                         {link.title}
                       </span>
                     )}
                   </Link>
                 ) : (
-                  <div
+                  <button
                     onClick={() => {
                       if (!isSidebarOpen) toggleSidebar();
                       if (hasSubLink) toggleExpanded(link.title);
                     }}
-                    className={`flex items-center px-3 py-2 rounded-xl cursor-pointer transition-all duration-200
-                      ${isActive ? "bg-blue-500/20 text-blue-600" : "text-blue-600 hover:bg-blue-500/10 hover:text-blue-600"}
-                      ${isSidebarOpen ? "gap-3" : "justify-center"}
+                    className={`w-full flex items-center h-11 px-3 rounded-xl transition-all duration-200 group
+                      ${
+                        isActive
+                          ? "bg-orange-500/10 text-orange-600"
+                          : "text-slate-500 hover:bg-orange-500/5 hover:text-orange-500"
+                      }
+                      ${isSidebarOpen ? "gap-3" : "md:justify-center"}
                     `}
                   >
                     <link.icon
-                      size={28}
-                      strokeWidth={1.5}
+                      size={22}
+                      strokeWidth={isActive ? 2.5 : 2}
                       className="shrink-0"
                     />
                     {isSidebarOpen && (
                       <>
-                        <span className="flex-1 text-base font-medium">
+                        <span className="flex-1 font-bold text-sm text-left truncate tracking-tight">
                           {link.title}
                         </span>
-                        {hasSubLink && (
-                          <ChevronDown
-                            size={16}
-                            className={`transition-transform duration-300 ${
-                              isExpanded ? "rotate-180" : ""
-                            }`}
-                          />
-                        )}
+                        <ChevronDown
+                          size={16}
+                          className={`transition-transform duration-300 opacity-40 ${
+                            isExpanded ? "rotate-180" : ""
+                          }`}
+                        />
                       </>
                     )}
-                  </div>
+                  </button>
                 )}
 
                 {isSidebarOpen && isExpanded && hasSubLink && (
-                  <div className="ml-5 mt-1 mb-2 flex flex-col gap-1 pl-4 border-l-2 border-blue-500/20">
+                  <div className="ml-8 mt-1 space-y-1 border-l border-orange-500/20 pl-4 py-1 animate-in fade-in slide-in-from-top-1 duration-200">
                     {link.subLinks?.map((sub) => {
                       const isSubActive = pathname === sub.href;
                       return (
                         <Link
                           key={sub.title}
                           href={sub.href}
-                          className={`py-2 text-sm transition-colors ${
+                          className={`block py-1.5 text-[13px] font-semibold transition-all ${
                             isSubActive
-                              ? "text-blue-600"
-                              : "text-slate-400 hover:text-blue-600"
+                              ? "text-orange-600"
+                              : "text-slate-400 hover:text-orange-500"
                           }`}
                         >
                           {sub.title}
@@ -134,15 +148,21 @@ export default function Sidebar() {
               </div>
             );
           })}
-        </div>
+        </nav>
 
-        {/* ФУТЕР */}
-        <div className="p-4 border-t border-orange-500/20 text-zinc-600">
+        <div className="p-3 md:p-4 border-t border-orange-500/10 shrink-0">
           <Link
-            href={"/"}
-            className="hover:text-orange-500 hover:bg-orange-500/10 px-2 py-2 transition-colors rounded-lg"
+            href="/"
+            className={`flex items-center h-11 px-3 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-orange-500 transition-all font-bold text-sm group
+                ${isSidebarOpen ? "gap-3" : "md:justify-center"}
+            `}
           >
-            Home
+            <Home size={22} className="shrink-0" />
+            {isSidebarOpen && (
+              <span className="truncate tracking-tight whitespace-nowrap">
+                Магазин
+              </span>
+            )}
           </Link>
         </div>
       </div>
