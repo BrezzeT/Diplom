@@ -59,6 +59,3 @@ export const useAdminFilterStore = create<FilterStateAdmin>((set) => ({
       color,
     }),
 }));
-
-
-
