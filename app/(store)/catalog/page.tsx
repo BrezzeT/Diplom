@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import FilterCatalog from "@/components/Catalog/Filter";
 import ProductList from "@/components/Admin/Product/ProductList";
 import { getAllProduct } from "@/lib/action/product.action";
