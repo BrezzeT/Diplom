@@ -10,9 +10,10 @@ export const createProduct = async (product: IProduct) => {
     const newProduct = await Product.create(product);
     revalidatePath("/admin/products");
     revalidatePath("/catalog");
-    return JSON.parse(JSON.stringify(newProduct));
+    return { success: true, data: JSON.parse(JSON.stringify(newProduct)) };
   } catch (error) {
     console.log(error, "Ошибка при створенні продукту");
+    return { success: false, error: "Помилка при створенні продукту" };
   }
 };
 export const getAllProduct = async () => {

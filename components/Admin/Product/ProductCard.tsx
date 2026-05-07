@@ -126,7 +126,7 @@ export default function ProductCard({ product, isAdmin }: Props) {
                   e.preventDefault();
                   if (!isOutStock) {
                     addItem({
-                      id: product._id,
+                      id: product._id as string,
                       name: product.name || "",
                       price: product.price || 0,
                       image: Array.isArray(product.image)

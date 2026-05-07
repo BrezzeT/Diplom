@@ -11,7 +11,6 @@ export default function ProductForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState<IProduct>({
-    _id: "",
     name: "",
     description: "",
     price: 0,
@@ -45,9 +44,7 @@ export default function ProductForm() {
     <div className="flex flex-col gap-10">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">
-            Додати товар
-          </h1>
+          <h1 className="text-3xl font-bold">Додати товар</h1>
           <p className="text-slate-500">
             Створіть новий продукт у вашому каталозі
           </p>
