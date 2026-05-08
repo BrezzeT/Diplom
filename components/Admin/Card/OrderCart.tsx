@@ -1,73 +1,114 @@
 "use client";
 import { IOrder } from "@/types/types";
-import { User, Package, Calendar, ArrowRight, Phone } from "lucide-react";
+import { Calendar, ArrowRight, Phone } from "lucide-react";
 import { FILTER_STATUS } from "@/config/constants";
 
 export function OrderCard({ order }: { order: IOrder }) {
-  const statusInfo = FILTER_STATUS.find((s) => s.id === order.status) || FILTER_STATUS[1];
+  const statusInfo =
+    FILTER_STATUS.find((s) => s.id === order.status) || FILTER_STATUS[1];
   const StatusIcon = statusInfo.icon;
-  const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString("uk-UA") : "";
+  const date = order.createdAt
+    ? new Date(order.createdAt).toLocaleDateString("uk-UA")
+    : "";
 
   return (
-    <div className="group bg-white border border-slate-100 md:border-slate-50 rounded-2xl md:rounded-[22px] p-4 md:px-8 md:py-4 hover:border-orange-500/20 transition-all duration-300 cursor-pointer">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-        {/* ID & Client */}
-        <div className="md:col-span-2 flex flex-col">
-          <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-0.5">
-            ID-{order._id?.slice(-5).toUpperCase()}
+    <div className="group bg-white transition-all duration-500 cursor-pointer border border-slate-200 rounded-[28px] md:rounded-[32px] overflow-hidden relative hover:border-orange-500/30 hover:shadow-xl hover:shadow-slate-100/50">
+      <div className="hidden md:grid grid-cols-12 items-center px-10 py-7 gap-4">
+        <div className="col-span-3 flex items-center gap-4 min-w-0">
+          <div className="bg-slate-950 text-white px-3 py-1.5 rounded-xl">
+            <span className="text-[12px] font-black tracking-widest">
+              {order._id?.toString()?.slice(-5).toUpperCase() || "NEW"}
+            </span>
+          </div>
+          <span className="text-[18px] font-black text-slate-950 truncate tracking-tight">
+            {order.name}
           </span>
-          <div className="flex items-center gap-1.5 text-slate-400 md:hidden mb-2">
-             <Calendar size={12} />
-             <span className="text-[10px] font-bold">{date}</span>
+        </div>
+        <div className="col-span-2 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-blue-500 transition-colors">
+            <Phone size={16} />
           </div>
+          <span className="text-[15px] font-bold text-slate-700 tracking-tight">
+            {order.phone}
+          </span>
+        </div>
+        <div className="col-span-2 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:text-orange-500 transition-colors">
+            <Calendar size={16} />
+          </div>
+          <span className="text-[15px] font-bold text-slate-700 tracking-tight">
+            {date}
+          </span>
         </div>
 
-        <div className="md:col-span-3 flex items-center gap-3">
-          <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-300 shrink-0 group-hover:bg-white group-hover:text-slate-900 transition-all border border-transparent group-hover:border-slate-100">
-            <User size={18} />
-          </div>
-          <div className="min-w-0 flex flex-col">
-            <h3 className="text-sm font-black text-slate-900 truncate leading-tight uppercase tracking-tight">
-              {order.name}
-            </h3>
-            <div className="flex items-center gap-1 text-slate-400">
-              <Phone size={10} />
-              <span className="text-[11px] font-bold">{order.phone}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Date (Desktop only) */}
-        <div className="hidden md:flex md:col-span-2 flex-col">
-          <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1">Оформлено</span>
-          <span className="text-[12px] font-bold text-slate-600">{date}</span>
-        </div>
-
-        {/* Status */}
-        <div className="md:col-span-2 flex justify-start md:justify-center">
-          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${statusInfo.bg} ${statusInfo.color} border border-transparent`}>
-            <StatusIcon size={12} strokeWidth={3} />
-            <span className="text-[10px] font-black uppercase tracking-widest whitespace-nowrap">
+        <div className="col-span-2 flex justify-center">
+          <div
+            className={`flex items-center gap-2.5 px-4 py-2 rounded-full ${statusInfo.bg} ${statusInfo.color} border border-transparent transition-all duration-300`}
+          >
+            <StatusIcon size={14} strokeWidth={3} />
+            <span className="text-[11px] font-black uppercase tracking-widest whitespace-nowrap">
               {statusInfo.label}
             </span>
           </div>
         </div>
-
-        {/* Price */}
-        <div className="md:col-span-2 flex flex-col md:items-end">
-          <div className="flex items-center gap-1 text-[10px] font-black text-slate-300 uppercase tracking-widest mb-0.5">
-            <Package size={10} className="text-orange-500" />
-            {order.items.length} тов.
+        <div className="col-span-3 flex items-center justify-end gap-5">
+          <div className="text-right">
+            <span className="text-2xl font-black text-slate-950 tracking-tighter">
+              {order.totalPrice?.toLocaleString() || 0}
+            </span>
+            <span className="text-[14px] text-slate-300 font-bold ml-1">₴</span>
           </div>
-          <span className="text-lg font-black text-slate-950 tracking-tighter">
-            {order.totalPrice.toLocaleString()} <span className="text-[11px] opacity-30 font-bold">₴</span>
-          </span>
+          <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-slate-950 group-hover:text-white transition-all duration-500 shadow-sm">
+            <ArrowRight size={22} strokeWidth={3} />
+          </div>
+        </div>
+      </div>
+
+      <div className="md:hidden p-6 flex flex-col gap-6">
+        <div className="flex items-start justify-between">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <div className="bg-slate-950 text-white px-2.5 py-1 rounded-lg">
+                <span className="text-[10px] font-black tracking-widest">
+                  #{order._id?.toString()?.slice(-5).toUpperCase() || "NEW"}
+                </span>
+              </div>
+              <div
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full ${statusInfo.bg} ${statusInfo.color}`}
+              >
+                <StatusIcon size={10} strokeWidth={3} />
+                <span className="text-[10px] font-black uppercase tracking-tighter">
+                  {statusInfo.label}
+                </span>
+              </div>
+            </div>
+            <h4 className="text-[22px] font-black text-slate-950 tracking-tight leading-tight">
+              {order.name}
+            </h4>
+          </div>
+          <div className="text-right pt-1">
+            <span className="text-2xl font-black text-slate-950 tracking-tighter">
+              {order.totalPrice?.toLocaleString() || 0}
+            </span>
+            <span className="text-[12px] text-slate-300 font-bold ml-1">₴</span>
+          </div>
         </div>
 
-        {/* Action */}
-        <div className="md:col-span-1 flex justify-end">
-          <div className="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-slate-950 group-hover:text-white transition-all duration-300 border border-transparent group-hover:border-slate-900">
-            <ArrowRight size={16} strokeWidth={3} />
+        <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+          <div className="flex flex-col gap-2.5">
+            <div className="flex items-center gap-3 text-slate-600">
+              <Phone size={16} className="text-slate-300" />
+              <span className="text-[16px] font-bold tracking-tight">
+                {order.phone}
+              </span>
+            </div>
+            <div className="flex items-center gap-3 text-slate-400">
+              <Calendar size={16} className="text-slate-300" />
+              <span className="text-[15px] font-medium">{date}</span>
+            </div>
+          </div>
+          <div className="w-14 h-14 rounded-[20px] bg-slate-950 flex items-center justify-center text-white active:scale-95 transition-transform shadow-xl shadow-slate-200">
+            <ArrowRight size={24} strokeWidth={2.5} />
           </div>
         </div>
       </div>

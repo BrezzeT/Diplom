@@ -59,3 +59,19 @@ export const useAdminFilterStore = create<FilterStateAdmin>((set) => ({
       color,
     }),
 }));
+
+import { IOrder } from "@/types/types";
+
+interface OrderDrawerState {
+  isOpen: boolean;
+  order: IOrder | null;
+  openDrawer: (order: IOrder) => void;
+  closeDrawer: () => void;
+}
+
+export const useOrderDrawerStore = create<OrderDrawerState>((set) => ({
+  isOpen: false,
+  order: null,
+  openDrawer: (order) => set({ isOpen: true, order }),
+  closeDrawer: () => set({ isOpen: false, order: null }),
+}));

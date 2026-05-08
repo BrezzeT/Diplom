@@ -1,150 +1,138 @@
 "use client";
-import { FILTER_STATUS } from "@/config/constants";
-import { Search, ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import { FILTER_STATUS } from "@/config/constants";
 import { IOrder } from "@/types/types";
 import { OrderCard } from "../Card/OrderCart";
-import OrderDetailsDrawer from "../Order/OrderDetailsDrawer";
+import { useOrderDrawerStore } from "@/lib/store/general";
+import {
+  Search,
+  ChevronDown,
+  Filter as FilterIcon,
+  Package,
+} from "lucide-react";
 
-export function FilterOrder({ orders = [] }: { orders: IOrder[] }) {
+export default function FilterOrder({ orders }: { orders: IOrder[] }) {
+  const openDrawer = useOrderDrawerStore((s) => s.openDrawer);
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
-
-  const getCount = (id: string) => {
-    if (id === "all") return orders.length;
-    return orders.filter((order) => order.status === id).length;
-  };
 
   const filteredOrders = orders.filter((order) => {
     const matchesStatus =
       activeFilter === "all" || order.status === activeFilter;
     const matchesSearch =
-      order.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.phone.includes(searchQuery) ||
-      order._id?.toLowerCase().includes(searchQuery.toLowerCase());
-
+      order.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order._id?.toString().toLowerCase().includes(searchQuery.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 
   return (
-    <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <OrderDetailsDrawer
-        order={selectedOrder}
-        isOpen={!!selectedOrder}
-        onClose={() => setSelectedOrder(null)}
-      />
-
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900">
-            Керування <span className="text-orange-500">замовленнями</span>
-          </h1>
-          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest mt-1">
-            Аналітика та обробка продажів магазину
-          </p>
-        </div>
-
-        <div className="relative group w-full md:w-80">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-orange-500 transition-colors" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Швидкий пошук..."
-            className="w-full h-11 pl-11 pr-4 bg-white border border-slate-100 rounded-xl outline-none focus:border-orange-500/20 transition-all font-bold text-[13px] text-slate-700 placeholder:text-slate-200"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="space-y-8 animate-in fade-in duration-700 pb-20">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {FILTER_STATUS.map((status) => {
-          const Icon = status.icon;
+          const count =
+            status.id === "all"
+              ? orders.length
+              : orders.filter((o) => o.status === status.id).length;
+
           const isActive = activeFilter === status.id;
+          const Icon = status.icon;
 
           return (
             <button
               key={status.id}
               onClick={() => setActiveFilter(status.id)}
-              className={`p-6 rounded-[24px] border transition-all duration-300 flex items-center gap-4 text-left relative overflow-hidden ${
+              className={`group p-5 md:p-7 rounded-[28px] border transition-all duration-500 flex flex-col gap-5 text-left relative overflow-hidden ${
                 isActive
-                  ? `bg-white border-slate-950 text-slate-950`
-                  : "bg-white border-slate-100 text-slate-400 hover:border-slate-200"
+                  ? `bg-slate-950 border-slate-950 text-white shadow-xl shadow-slate-200`
+                  : "bg-white border-slate-100 text-slate-500 hover:border-orange-500/30 hover:shadow-lg hover:shadow-slate-50"
               }`}
             >
-              <div
-                className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 ${
-                  isActive
-                    ? `${status.bg} ${status.color}`
-                    : "bg-slate-50 text-slate-300"
-                }`}
-              >
-                <Icon size={24} strokeWidth={isActive ? 3 : 2} />
+              <div className="flex items-center justify-between w-full">
+                <div
+                  className={`w-10 h-10 md:w-12 md:h-12 rounded-2xl flex items-center justify-center transition-colors duration-500 ${
+                    isActive
+                      ? "bg-white/10"
+                      : "bg-slate-50 group-hover:bg-orange-50 text-slate-400 group-hover:text-orange-500"
+                  }`}
+                >
+                  <Icon
+                    size={isActive ? 22 : 20}
+                    strokeWidth={isActive ? 2.5 : 2}
+                  />
+                </div>
+                <div
+                  className={`text-2xl md:text-3xl font-black tracking-tighter ${isActive ? "text-white" : "text-slate-900"}`}
+                >
+                  {count}
+                </div>
               </div>
 
-              <div className="min-w-0">
-                <span className="block text-[10px] font-black uppercase tracking-widest opacity-60 truncate">
+              <div>
+                <div
+                  className={`text-[10px] md:text-[11px] font-black uppercase tracking-[0.15em] opacity-60`}
+                >
                   {status.label}
-                </span>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-2xl font-black tracking-tight leading-none">
-                    {getCount(status.id)}
-                  </span>
-                  <span className="text-[9px] font-black uppercase opacity-30">
-                    замов.
-                  </span>
                 </div>
               </div>
 
               {isActive && (
-                <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-orange-500" />
+                <div className="absolute -right-2 -bottom-2 opacity-10 rotate-12">
+                  <Icon size={80} />
+                </div>
               )}
             </button>
           );
         })}
       </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="hidden md:grid grid-cols-12 gap-4 px-8 py-3 bg-slate-50/50 rounded-xl border border-slate-50 mb-2">
-          <div className="col-span-2 text-[10px] font-black text-slate-300 uppercase tracking-widest">
-            ID Замовлення
-          </div>
-          <div className="col-span-3 text-[10px] font-black text-slate-300 uppercase tracking-widest">
-            Клієнт
-          </div>
-          <div className="col-span-2 text-[10px] font-black text-slate-300 uppercase tracking-widest">
-            Дата
-          </div>
-          <div className="col-span-2 text-[10px] font-black text-slate-300 uppercase tracking-widest text-center">
-            Статус
-          </div>
-          <div className="col-span-2 text-[10px] font-black text-slate-300 uppercase tracking-widest text-right">
-            Сума
-          </div>
-          <div className="col-span-1"></div>
+      <div className="flex flex-col md:flex-row md:items-center gap-4 bg-white border border-slate-100 p-3 rounded-[24px]">
+        <div className="relative flex-1 group">
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-orange-500 transition-colors"
+            size={18}
+          />
+          <input
+            type="text"
+            placeholder="Пошук за ім'ям або ID..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full h-12 pl-12 pr-6 bg-slate-50/50 border border-transparent focus:border-slate-100 rounded-xl outline-none text-sm font-bold text-slate-700 placeholder:text-slate-300 transition-all"
+          />
         </div>
+        <div className="flex items-center gap-2 px-2">
+          <div className="h-8 w-px bg-slate-100 hidden md:block" />
+          <button className="flex items-center gap-2 px-4 h-12 rounded-xl text-slate-400 hover:text-slate-900 font-black uppercase text-[10px] tracking-widest transition-all">
+            <FilterIcon size={14} />
+            Сортування
+            <ChevronDown size={14} />
+          </button>
+        </div>
+      </div>
 
-        <div className="flex flex-col gap-2">
-          {filteredOrders.length > 0 ? (
-            filteredOrders.map((order) => (
-              <div key={order._id} onClick={() => setSelectedOrder(order)}>
-                <OrderCard order={order} />
-              </div>
-            ))
-          ) : (
-            <div className="flex flex-col items-center justify-center py-20 bg-white border border-slate-50 border-dashed rounded-[32px]">
-              <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-200 mb-4">
-                <ShoppingCart size={32} />
-              </div>
-              <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight">
-                Замовлень не знайдено
-              </h3>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-1">
-                Спробуйте інший статус або пошуковий запит
-              </p>
+      <div className="space-y-4">
+        {filteredOrders.length > 0 ? (
+          filteredOrders.map((order) => (
+            <div
+              key={order._id?.toString()}
+              onClick={() => openDrawer(order)}
+              className="cursor-pointer"
+            >
+              <OrderCard order={order} />
             </div>
-          )}
-        </div>
+          ))
+        ) : (
+          <div className="p-20 flex flex-col items-center justify-center text-center bg-white border border-slate-100 rounded-[32px]">
+            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 mb-6">
+              <Package size={40} />
+            </div>
+            <h3 className="text-xl font-black text-slate-900 mb-2">
+              Замовлень не знайдено
+            </h3>
+            <p className="text-sm font-bold text-slate-400 max-w-64">
+              Спробуйте змінити фільтр або параметри пошуку
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
